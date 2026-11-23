@@ -25,13 +25,19 @@ At the end of a session (Ctrl+C) it prints total words, average WPM, pauses and 
 - Jabra SPEAK 510 USB mic
 - Two-way mirror with display
 
-## Run
-pip install SpeechRecognition pyaudio rpi_ws281x requests
+## Run (Raspberry Pi)
+source ledenv/bin/activate
+pip install SpeechRecognition pyaudio rpi_ws281x groq
 export GROQ_API_KEY=your_key
-sudo -E python3 speechcoach.py
+sudo -E ledenv/bin/python3 speechcoach.py
 
-## QNX port
-Simulated in a VMware VM with four C processes: speech analyser, LED controller, session logger and a watchdog that restarts a killed process in about 1 second. Speech data is simulated and LED output is printed as text.
+## QNX port (qnx/ folder)
+Four C processes: speech analyser, LED controller, session logger and a watchdog. The watchdog restarts a killed process in about 1 second. Speech data is simulated and LED output is printed as text.
+
+make
+on -p62 ./watchdog
+
+Demo: in a second terminal run `pidin`, then `kill -9 <speech_analyser PID>`. The watchdog logs the crash and restarts it.
 
 ## Status
 - ✅ Speech analysis engine on the Pi (WPM, fillers, pauses), with LED feedback
